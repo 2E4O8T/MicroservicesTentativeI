@@ -14,7 +14,7 @@ namespace PlayCatalogService.Repositories
 
         public ItemsRepository()
         {
-            var mongoClient = new MongoClient("mongodb://localhost:21017");
+            var mongoClient = new MongoClient("mongodb://localhost:27017");
             var database = mongoClient.GetDatabase("Catalog");
             dbCollection = database.GetCollection<Item>(collectionName);
         }
@@ -24,7 +24,7 @@ namespace PlayCatalogService.Repositories
             return await dbCollection.Find(filterBuilder.Empty).ToListAsync();
         }
 
-        public async Task<Item> GetByIdAsync(Guid id)
+        public async Task<Item> GetAsync(Guid id)
         {
             FilterDefinition<Item> filter = filterBuilder.Eq(entity => entity.Id, id);
 
@@ -52,7 +52,7 @@ namespace PlayCatalogService.Repositories
             await dbCollection.ReplaceOneAsync(filter, entity);
         }
 
-        public async Task RemoveAsyItem(Guid id)
+        public async Task RemoveAsync(Guid id)
         {
             FilterDefinition<Item> filter = filterBuilder.Eq(entity => entity.Id, id);
             await dbCollection.DeleteOneAsync(filter);
